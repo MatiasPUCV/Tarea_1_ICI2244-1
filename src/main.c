@@ -5,9 +5,6 @@
 
 #include "list.h"
 
-char* GetFile(const char* filename);
-void CsvToList(List* L, const char* filename);
-
 typedef enum State
 {
     Taken,
@@ -17,15 +14,22 @@ typedef enum State
 
 typedef struct Book
 {
+    char* title;
     char* author;
     char* genre;
-    unsigned int isbn;
+    int isbn;
+    int ubication;
     State state;
 
     // TODO: cambiar por una Cola
     void* reservation1;
     void* reservation2;
 } Book;
+
+char* GetFile(const char* filename);
+void CsvToList(List* L, const char* filename);
+Book* StrToBook(char* str);
+void PrintBook(Book* book);
 
 
 int main()
@@ -56,7 +60,6 @@ void CsvToList(List* L, const char* filename)
             continue;
 
         char* str = calloc(strsize, sizeof(char));
-
         for (size_t j = 0; j < strsize; j++)
         {
             str[j] = file[j + lastpos];
@@ -84,11 +87,50 @@ char* GetFile(const char* filename)
     fseek(file, 0, SEEK_END);
     size_t size = ftell(file);
     fseek(file, 0, SEEK_SET);
-
     char* contents = malloc(sizeof(char)*size);
 
     fread(contents, 1, size, file);
     fclose(file);
 
     return contents;
+}
+
+Book* StrToBook(char* str)
+{
+    Book* book = malloc(sizeof(book));
+
+    char** strList[3] = {&book->title, &book->author, &book->genre};
+
+    char* element = strtok(str, ",");
+    for (int i = 0; i < 3; i++)
+    {
+        *strList[i] = element;
+        element = strtok(NULL, ",");
+    }
+    
+    int* intList[3] = {&book->isbn, &book->ubication, (int*)&book->state};
+    int baseList[3] = {10, 16, 10};
+
+    for (int i = 0; i < 3; i++)
+    {
+        *intList[i] = strtol(element, NULL, baseList[i]);
+        element = strtok(NULL, ",");
+    }
+
+    // TODO: Añadir Cola
+
+    return book;
+}
+
+void FreeBook(Book* book)
+{
+    char** strList[3] = {&book->title, &book->author, &book->genre};
+
+    for (int i = 0; i < 3; i++)
+        free(strList[i]);
+}
+
+void PrintBook(Book* book)
+{
+    printf("%s, %s, %s, %i, %x, %i,\n", book->title, book->author, book->genre, book->isbn, book->ubication, book->state);
 }
