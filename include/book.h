@@ -3,9 +3,9 @@
 
 typedef enum State
 {
-    Taken,
-    Available,
-    Reserved
+    Taken = 0,
+    Available = 1,
+    Reserved = 2
 } State;
 
 typedef struct Book
@@ -22,9 +22,11 @@ typedef struct Book
     void* reservation2;
 } Book;
 
+Book* CreateBook();
 Book* StrToBook(char* str);
-
 void FreeBook(Book* book);
 void PrintBook(Book* book);
+void SetBookState(Book* book, const char* str);
+
 
 #endif // BOOK

@@ -36,11 +36,12 @@ void CsvToList(List* L, const char* filename)
         if (strsize == -1)
             continue;
 
-        char* str = calloc(strsize, sizeof(char));
+        char* str = calloc(strsize + 1, sizeof(char));
         for (size_t j = 0; j < strsize; j++)
         {
             str[j] = file[j + lastpos];
         }
+        str[strsize] = ',';
 
         if(!first)
         {
