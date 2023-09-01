@@ -4,40 +4,17 @@
 #include <stdbool.h>
 
 #include "list.h"
-
-typedef enum State
-{
-    Taken,
-    Available,
-    Reserved
-} State;
-
-typedef struct Book
-{
-    char* title;
-    char* author;
-    char* genre;
-    int isbn;
-    int ubication;
-    State state;
-
-    // TODO: cambiar por una Cola
-    void* reservation1;
-    void* reservation2;
-} Book;
+#include "book.h"
 
 char* GetFile(const char* filename);
 void CsvToList(List* L, const char* filename);
-Book* StrToBook(char* str);
-void PrintBook(Book* book);
-
 
 int main()
 {
-    List* Library = createList();
-    CsvToList(Library, "biblioteca.csv");
+    List* library = createList();
+    CsvToList(library, "biblioteca.csv");
 
-    
+    free(library);    
 }
 
 void CsvToList(List* L, const char* filename)
@@ -49,13 +26,13 @@ void CsvToList(List* L, const char* filename)
 
     for(size_t i = 0; i < size; i++)
     {
+
         char c = file[i];
+        size_t strsize = i - lastpos - 1;
 
         if(c != '\n')
             continue;
         
-        size_t strsize = i - lastpos - 1;
-
         if (strsize == -1)
             continue;
 
@@ -65,13 +42,17 @@ void CsvToList(List* L, const char* filename)
             str[j] = file[j + lastpos];
         }
 
-        if(first)
-            first = false;
+        if(!first)
+        {
+            Book* book = StrToBook(str);
+            PrintBook(book);
+        }
         else
-            // Convertir a 'Book'
+        {
+            first = false;
+        }
 
         lastpos = i + 1;
-        free(str);
     }
 }
 
@@ -95,42 +76,3 @@ char* GetFile(const char* filename)
     return contents;
 }
 
-Book* StrToBook(char* str)
-{
-    Book* book = malloc(sizeof(book));
-
-    char** strList[3] = {&book->title, &book->author, &book->genre};
-
-    char* element = strtok(str, ",");
-    for (int i = 0; i < 3; i++)
-    {
-        *strList[i] = element;
-        element = strtok(NULL, ",");
-    }
-    
-    int* intList[3] = {&book->isbn, &book->ubication, (int*)&book->state};
-    int baseList[3] = {10, 16, 10};
-
-    for (int i = 0; i < 3; i++)
-    {
-        *intList[i] = strtol(element, NULL, baseList[i]);
-        element = strtok(NULL, ",");
-    }
-
-    // TODO: Añadir Cola
-
-    return book;
-}
-
-void FreeBook(Book* book)
-{
-    char** strList[3] = {&book->title, &book->author, &book->genre};
-
-    for (int i = 0; i < 3; i++)
-        free(strList[i]);
-}
-
-void PrintBook(Book* book)
-{
-    printf("%s, %s, %s, %i, %x, %i,\n", book->title, book->author, book->genre, book->isbn, book->ubication, book->state);
-}
