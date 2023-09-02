@@ -13,6 +13,9 @@ char* GetFile(const char* filename);
 void CsvToList(List* L, const char* filename)
 {
     char* file = GetFile(filename);
+    if(file == NULL)
+        return;
+
     size_t size = strlen(file);
     size_t lastpos = 0;
     bool first = true;
@@ -22,7 +25,7 @@ void CsvToList(List* L, const char* filename)
         char c = file[i];
         size_t strsize = i - lastpos - 1;
 
-        if(c != '\n' && c != EOF)
+        if(c != '\n')
             continue;
         
         if (strsize == -1)
@@ -40,10 +43,7 @@ void CsvToList(List* L, const char* filename)
         {
             Book* book = StrToBook(str);
             if (book != NULL)
-            {
-                PrintBook(book);
                 pushFront(L, book);
-            }
         }
         else
         {

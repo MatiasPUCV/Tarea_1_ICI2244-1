@@ -4,6 +4,7 @@
 #include "list.h"
 
 void ShowAllBooks(List* L);
+void RegisterBook(List* L, char* str);
 void ClearAll(List* L);
 
 

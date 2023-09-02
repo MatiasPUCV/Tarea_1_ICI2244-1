@@ -13,6 +13,12 @@ void ShowAllBooks(List* L)
     }
 }
 
+void RegisterBook(List* L, char* str)
+{
+    Book* book = StrToBook(str);
+    pushBack(L, book);
+}
+
 void ClearAll(List* L)
 {
     Book* book = firstList(L);

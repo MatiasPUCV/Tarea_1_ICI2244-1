@@ -53,8 +53,6 @@ Book* StrToBook(char* str)
 
 void AddElementToBook(Book* book, char* element, int num)
 {
-    //printf("%s\n", element);
-
     switch (num)
     {
     case 0:
