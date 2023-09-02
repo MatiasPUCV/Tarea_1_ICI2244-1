@@ -30,7 +30,7 @@ Book* StrToBook(char* str);
 void FreeBook(Book* book);
 
 void PrintBook(Book* book);
-void PrintState(Book* book);
+void PrintToStreamState(Book* book, FILE* stream);
 void PrintReservations(Book* book);
 void PrintToFileBook(Book* book, FILE* file);
 

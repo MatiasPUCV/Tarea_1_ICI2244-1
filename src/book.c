@@ -122,20 +122,8 @@ void PrintToFileBook(Book* book, FILE* file)
 {
     fprintf(file, "%s,%s,%s,%i,%x,", book->title, book->author, book->genre, book->isbn, book->ubication);
 
-    switch (book->state)
-    {
-    case Available:
-        fprintf(file, "Disponible,");
-        break;
-
-    case Taken:
-        fprintf(file, "Prestado,");
-        break;
-
-    case Reserved:
-        fprintf(file, "Reservado,");
-        break;
-    }
+    PrintToStreamState(book, file);
+    fprintf(file, ",");
 
     queueNode* current = book->reservations->front;
     while (current != NULL)
@@ -152,26 +140,26 @@ void PrintToFileBook(Book* book, FILE* file)
 void PrintBook(Book* book)
 {
     printf("%s,  %s,  %s,  %i,  %x, ", book->title, book->author, book->genre, book->isbn, book->ubication);
-    PrintState(book);
+    PrintToStreamState(book, stdout);
     printf(", ");
     PrintReservations(book);
     printf("\n");
 }
 
-void PrintState(Book* book)
+void PrintToStreamState(Book* book, FILE* stream)
 {
     switch (book->state)
     {
     case Available:
-        printf("Disponible");
+        fprintf(stream, "Disponible");
         break;
 
     case Taken:
-        printf("Prestado");
+        fprintf(stream, "Prestado");
         break;
 
     case Reserved:
-        printf("Reservado");
+        fprintf(stream, "Reservado");
         break;
     }
 }
@@ -181,7 +169,9 @@ void PrintReservations(Book* book)
     queueNode* current = book->reservations->front;
     while (current != NULL)
     {
-        printf("%s, ", current->data);
+        printf("%s", current->data);
         current = current->next;
+        if (current != NULL)
+            printf(", ");
     }
 }
