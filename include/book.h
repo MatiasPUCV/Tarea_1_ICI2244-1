@@ -1,6 +1,8 @@
 #ifndef BOOK
 #define BOOK
 
+#include "queue.h"
+
 typedef enum State
 {
     Taken = 0,
@@ -16,10 +18,8 @@ typedef struct Book
     int isbn;
     int ubication;
     State state;
+    Queue* reservations;
 
-    // TODO: cambiar por una Cola
-    void* reservation1;
-    void* reservation2;
 } Book;
 
 Book* CreateBook();

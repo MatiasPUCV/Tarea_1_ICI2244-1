@@ -2,6 +2,13 @@
 
 #include <stdlib.h>
 
+Queue* createQueue() {
+    Queue* newQueue = (Queue*)malloc(sizeof(Queue));
+    newQueue->front = NULL;
+    newQueue->back = NULL;
+    return newQueue;
+}
+
 void push(Queue* queue, void* data) {
     queueNode* newNode = (queueNode*)malloc(sizeof(queueNode));
     newNode->data = data;

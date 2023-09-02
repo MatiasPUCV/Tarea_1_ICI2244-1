@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "queue.h"
+
 void AddElementToBook(Book* book, char* element, int num);
 
 // Convierte una STR con la información de un libro
@@ -112,8 +114,7 @@ Book* CreateBook()
     book->isbn = -1;
     book->ubication = -1;
     book->state = Available;
-    book->reservation1 = NULL;
-    book->reservation2 = NULL;
+    book->reservations = createQueue();
 
     return book;
 }
