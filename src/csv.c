@@ -19,11 +19,10 @@ void CsvToList(List* L, const char* filename)
 
     for(size_t i = 0; i < size; i++)
     {
-
         char c = file[i];
         size_t strsize = i - lastpos - 1;
 
-        if(c != '\n')
+        if(c != '\n' && c != EOF)
             continue;
         
         if (strsize == -1)
@@ -61,9 +60,11 @@ char* GetFile(const char* filename)
     }
 
     fseek(file, 0, SEEK_END);
-    size_t size = ftell(file);
+    size_t size = ftell(file) + 1;
     fseek(file, 0, SEEK_SET);
     char* contents = malloc(sizeof(char)*size);
+
+    contents[size] = '\n';
 
     fread(contents, 1, size, file);
     fclose(file);
