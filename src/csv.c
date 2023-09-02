@@ -39,7 +39,7 @@ void CsvToList(List* L, const char* filename)
         if(!first)
         {
             Book* book = StrToBook(str);
-            pushBack(&L, book);
+            pushFront(L, book);
         }
         else
         {

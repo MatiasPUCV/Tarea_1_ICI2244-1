@@ -1,6 +1,20 @@
 #ifndef List_h
 #define List_h
 
+typedef struct Node Node;
+
+struct Node {
+  void *data;
+  Node *next;
+  Node *prev;
+};
+
+struct List {
+  Node *head;
+  Node *tail;
+  Node *current;
+};
+
 typedef struct List List;
 
 List* createList(void);

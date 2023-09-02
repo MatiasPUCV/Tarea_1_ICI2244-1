@@ -10,6 +10,14 @@ int main()
     List* library = createList();
     CsvToList(library, "biblioteca.csv");
 
+    Book* book = firstList(library);
+    while (library->current != NULL)
+    {
+        PrintBook(book);
+        FreeBook(book);
+        book = nextList(library);
+    }
+    
     free(library);    
 }
 

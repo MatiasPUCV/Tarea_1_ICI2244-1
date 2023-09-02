@@ -14,14 +14,11 @@ void AddElementToBook(Book* book, char* element, int num);
 //
 Book* StrToBook(char* str)
 {
-
     size_t size = strlen(str);
     size_t lastpos = 0;
     int elementCount = 0;
 
     Book* book = CreateBook();
-
-    //printf("%s\n", str);
 
     for(size_t i = 0; i < size; i++)
     {
@@ -75,6 +72,7 @@ void AddElementToBook(Book* book, char* element, int num)
         break;
     
     default:
+    // TODO: Cola.
         break;
     }
 }
