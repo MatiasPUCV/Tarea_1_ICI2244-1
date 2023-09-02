@@ -1,12 +1,14 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-typedef struct queueNode {
+typedef struct queueNode
+{
     void* data;
     struct queueNode* next;
 } queueNode;
 
-typedef struct {
+typedef struct
+{
     queueNode* front;
     queueNode* back;
 } Queue;

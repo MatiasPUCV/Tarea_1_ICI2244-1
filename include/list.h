@@ -2,13 +2,15 @@
 #define LIST_H
 typedef struct Node Node;
 
-struct Node {
+struct Node
+{
   void *data;
   Node *next;
   Node *prev;
 };
 
-struct List {
+struct List
+{
   Node *head;
   Node *tail;
   Node *current;
