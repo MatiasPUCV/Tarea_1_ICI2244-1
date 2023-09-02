@@ -65,11 +65,11 @@ char* GetFile(const char* filename)
     }
 
     fseek(file, 0, SEEK_END);
-    size_t size = ftell(file) + 1;
+    size_t size = ftell(file) + 2;
     fseek(file, 0, SEEK_SET);
-    char* contents = malloc(sizeof(char)*size);
+    char* contents = calloc(size, sizeof(char));
 
-    contents[size] = '\n';
+    contents[size - 2] = '\n';
 
     fread(contents, 1, size, file);
     fclose(file);
