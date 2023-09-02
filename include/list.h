@@ -1,6 +1,5 @@
-#ifndef List_h
-#define List_h
-
+#ifndef LIST_H
+#define LIST_H
 typedef struct Node Node;
 
 struct Node {
@@ -33,6 +32,6 @@ void* popFront(List* list);
 void* popBack(List* list);
 void* popCurrent(List* list);
 
-#endif // List_h
+#endif // LIST_H
 
 
