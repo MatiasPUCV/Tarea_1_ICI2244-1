@@ -14,6 +14,8 @@ int main()
     char test[] = "Título,Autor,Género,ISBN,Ubicación,Estado,Reservas";
     RegisterBook(library, test);
 
+    ListToCsv(library, "Test.csv");
+
     ShowAllBooks(library);
     ClearAll(library);
 }

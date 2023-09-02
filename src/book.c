@@ -1,6 +1,5 @@
 #include "book.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -117,6 +116,37 @@ Book* CreateBook()
     book->reservations = createQueue();
 
     return book;
+}
+
+void PrintToFileBook(Book* book, FILE* file)
+{
+    fprintf(file, "%s,%s,%s,%i,%x,", book->title, book->author, book->genre, book->isbn, book->ubication);
+
+    switch (book->state)
+    {
+    case Available:
+        fprintf(file, "Disponible,");
+        break;
+
+    case Taken:
+        fprintf(file, "Prestado,");
+        break;
+
+    case Reserved:
+        fprintf(file, "Reservado,");
+        break;
+    }
+
+    queueNode* current = book->reservations->front;
+    while (current != NULL)
+    {
+        fprintf(file, "%s", current->data);
+        current = current->next;
+        if (current != NULL)
+            fprintf(file, ",");
+    }
+
+    fprintf(file, "\n");
 }
 
 void PrintBook(Book* book)

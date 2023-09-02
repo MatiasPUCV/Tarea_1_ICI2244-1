@@ -55,6 +55,24 @@ void CsvToList(List* L, const char* filename)
     }
 }
 
+void ListToCsv(List* L, const char* filename)
+{
+    FILE* file = fopen(filename, "w");
+    if (file == NULL)
+    {
+        // ERROR
+    }
+
+    Book* book = firstList(L);
+    while (L->current != NULL)
+    {
+        PrintToFileBook(book, file);
+        book = nextList(L);
+    } 
+
+    fclose(file);
+}
+
 char* GetFile(const char* filename)
 {
     FILE* file = fopen(filename, "r");
