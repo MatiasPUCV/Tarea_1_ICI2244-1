@@ -1,5 +1,5 @@
 #ifndef Queue
-#define Queue
+#define QUEUE
 
 typedef struct {
     char name[50];
