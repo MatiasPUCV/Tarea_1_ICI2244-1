@@ -1,4 +1,4 @@
-#ifndef Queue
+#ifndef QUEUE
 #define QUEUE
 
 typedef struct {
