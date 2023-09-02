@@ -11,7 +11,7 @@ int main()
     List* library = createList();
     CsvToList(library, "biblioteca.csv");
 
-    ShowAllBooks(library);
+    //ShowAllBooks(library);
     ClearAll(library);
 }
 

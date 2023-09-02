@@ -27,31 +27,34 @@ Book* StrToBook(char* str)
         char c = str[i];
         size_t strsize = i - lastpos - 1;
 
-        if(c != ',')
-            continue;
-        
-        if(strsize > 50)
+        if(c == ',' || c == '\n')
         {
-            printf("ERROR\n");
+            if(strsize > 50)
+            {
+                printf("ERROR: str con más de 50 caracteres; se ignorara el libro\n");
+                return NULL;
+            }
+
+            char* element = calloc(51, sizeof(char));
+            for (size_t j = 0; j < strsize + 1; j++)
+            {
+                element[j] = str[j + lastpos];
+            }
+
+            AddElementToBook(book, element, elementCount);
+
+            lastpos = i + 1;
+            elementCount++;
+
         }
-
-        char* element = calloc(51, sizeof(char));
-        for (size_t j = 0; j < strsize + 1; j++)
-        {
-            element[j] = str[j + lastpos];
-        }
-
-        AddElementToBook(book, element, elementCount);
-
-        lastpos = i + 1;
-        elementCount++;
     }
-
     return book;
 }
 
 void AddElementToBook(Book* book, char* element, int num)
 {
+    //printf("%s\n", element);
+
     switch (num)
     {
     case 0:
@@ -74,7 +77,7 @@ void AddElementToBook(Book* book, char* element, int num)
         break;
     
     default:
-    // TODO: Cola.
+    push(book->reservations, element);
         break;
     }
 }
@@ -97,7 +100,6 @@ void FreeBook(Book* book)
     {
         if(*strList[i] == NULL)
             free(*strList[i]);
-
     }
 
     if (book == NULL)
@@ -121,7 +123,37 @@ Book* CreateBook()
 
 void PrintBook(Book* book)
 {
-    printf("%s,  %s,  %s,  %i,  %x,  %i\n", book->title, book->author, book->genre, book->isbn, book->ubication, book->state);
+    printf("%s,  %s,  %s,  %i,  %x, ", book->title, book->author, book->genre, book->isbn, book->ubication);
+    PrintState(book);
+    printf(", ");
+    PrintReservations(book);
+    printf("\n");
+}
 
-    // TODO: Añadir Cola
+void PrintState(Book* book)
+{
+    switch (book->state)
+    {
+    case Available:
+        printf("Disponible");
+        break;
+
+    case Taken:
+        printf("Prestado");
+        break;
+
+    case Reserved:
+        printf("Reservado");
+        break;
+    }
+}
+
+void PrintReservations(Book* book)
+{
+    queueNode* current = book->reservations->front;
+    while (current != NULL)
+    {
+        printf("%s, ", current->data);
+        current = current->next;
+    }
 }

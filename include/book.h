@@ -26,6 +26,8 @@ Book* CreateBook();
 Book* StrToBook(char* str);
 void FreeBook(Book* book);
 void PrintBook(Book* book);
+void PrintState(Book* book);
+void PrintReservations(Book* book);
 void SetBookState(Book* book, const char* str);
 
 
