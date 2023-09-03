@@ -183,11 +183,13 @@ void PrintReservations(Book* book)
         printf(", %s", data);
         data = nextList(list);
     }
-    
+
     book->reservations = ListToQueue(list);
     free(list);
 }
 
+
+// Añade un elemento a un libro en cosideracion a un incide numerico
 void AddElementToBook(Book* book, char* element, int num)
 {
     if (num < 3)

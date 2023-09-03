@@ -266,7 +266,7 @@ void CancelReservation(List* L, char* title, char* author, char* name)
         {
             popCurrent(list);
 
-            printf("Reserva cancelada\n")
+            printf("Reserva cancelada\n");
 
             book->reservations = ListToQueue(list);
             free(list);
@@ -312,7 +312,7 @@ void TakeBackBook(List* L, char* title, char* author)
     if (book->state != Taken)
     {
         printf("[error] El libro no esta tomado\n");
-        return
+        return;
     }
 
     if(book->reservations->front == NULL)
