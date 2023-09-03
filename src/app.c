@@ -40,24 +40,44 @@ void App(List* L, bool* end)
     size_t lastpos = 0;
     int tokenCount = 0;
 
+    bool spaceAllowed = true;
+    bool longToken = false;
+
     // Separa la STR principal en, maximo 6 tokens que
     // seran lo parametos de cada funcion de la interfaz
     for(int i = 0; i < size + 1; i++)
     {
         char c = str[i];
 
-        if (c != ' ' && c != '\n')
+        if (c == '\"')
+        {
+            spaceAllowed = !spaceAllowed;
+
+            if (spaceAllowed)
+                longToken = true;
+        }
+
+        if (!(c == ' ' && spaceAllowed) && c != '\n')
             continue;
 
         size_t strsize = i - lastpos;
-
-        char* token = calloc(maxTokenSize + 1, sizeof(char));
-        for (size_t j = 0; j < strsize; j++)
+        if (longToken)
         {
-            token[j] = str[j + lastpos];
+            char* token = calloc(maxTokenSize - 1, sizeof(char));
+            for (size_t j = 0; j < strsize - 2; j++)
+                token[j] = str[j + lastpos + 1];
+    
+            longToken = false;
+            tokens[tokenCount] = token;
         }
-
-        tokens[tokenCount] = token;
+        else
+        {
+            char* token = calloc(maxTokenSize + 1, sizeof(char));
+            for (size_t j = 0; j < strsize; j++)
+                token[j] = str[j + lastpos];
+                
+            tokens[tokenCount] = token;
+        }
 
         lastpos = i + 1;
         tokenCount++;
@@ -207,6 +227,10 @@ void ShowBookData(List* L, char* title, char* author)
 void ShowAllBooks(List* L)
 {
     Book* book = firstList(L);
+
+    if (L->current == NULL)
+        printf("[error] No hay libros.\n");
+
     while (L->current != NULL)
     {
         PrintBook(book);
@@ -315,28 +339,6 @@ void ExportToCsv(List* L, const char* filename)
     fclose(file);
 }
 
-void* CreateLibrary(const char* filename)
-{
-    List* library = createList();
-    ImportfromCsv(library, filename);
-
-    return library;
-}
-
-// Libera toda la memoria de la lista
-void ClearAll(List* L)
-{
-    Book* book = firstList(L);
-    while (L->current != NULL)
-    {
-        FreeBook(book);
-        book = nextList(L);
-    }
-    
-    cleanList(L);
-    free(L);
-}
-
 // Convierte un archivo csv a una lista
 void ImportfromCsv(List* L, const char* filename)
 {
@@ -390,6 +392,27 @@ void ImportfromCsv(List* L, const char* filename)
         lastpos = i + 1;
     }
     free(file);
+}
+
+void* CreateLibrary(const char* filename)
+{
+    List* library = createList();
+
+    return library;
+}
+
+// Libera toda la memoria de la lista
+void ClearAll(List* L)
+{
+    Book* book = firstList(L);
+    while (L->current != NULL)
+    {
+        FreeBook(book);
+        book = nextList(L);
+    }
+    
+    cleanList(L);
+    free(L);
 }
 
 // Lee todo un archivo y lo devuelve en forma de str
