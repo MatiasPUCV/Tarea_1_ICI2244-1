@@ -94,6 +94,11 @@ void App(List* L, bool* end)
 
 */
 
+
+    //
+    //  Ejecuta una función asosciada a una comando
+    //  tambien tienen que coinsidir en la cantidad de parametros
+    //
     if (KeyWord(tokens[0], "registrar_libro", 1))
     {
         if(tokenCount == 2)
@@ -261,6 +266,8 @@ void CancelReservation(List* L, char* title, char* author, char* name)
         {
             popCurrent(list);
 
+            printf("Reserva cancelada\n")
+
             book->reservations = ListToQueue(list);
             free(list);
             return;
@@ -275,6 +282,8 @@ void CancelReservation(List* L, char* title, char* author, char* name)
     free(list);
 }
 
+// Cambia el estado de un libro a prestado, si el estudiante esta
+// primero en la cola de reservas o esta disponible, y lo elimina de la cola
 void TakeBook(List* L, char* title, char* author, char* name)
 {
     Book* book = CheckForBook(L, title, author);
@@ -293,20 +302,28 @@ void TakeBook(List* L, char* title, char* author, char* name)
     }
 }
 
+// Cambia el estado de un libro prestado a disponible
+// si es que no hay un cola de reservas, en tal caso cambia a reservado
 void TakeBackBook(List* L, char* title, char* author)
 {
     Book* book = CheckForBook(L, title, author);
     NO_BOOK(book);
 
     if (book->state != Taken)
+    {
         printf("[error] El libro no esta tomado\n");
+        return
+    }
 
     if(book->reservations->front == NULL)
         book->state = Available;
     else
         book->state = Reserved;
+
+    printf("Libro devuelto\n");
 }
 
+// Muestra por consola todos los libros prestados
 void ShowTakenBooks(List* L)
 {
     Book* book = firstList(L);
@@ -334,7 +351,9 @@ void ExportToCsv(List* L, const char* filename)
     {
         PrintBookToFile(book, file);
         book = nextList(L);
-    } 
+    }
+
+    printf("Archivo exportado\n");
 
     fclose(file);
 }
@@ -391,13 +410,15 @@ void ImportfromCsv(List* L, const char* filename)
         free(str);
         lastpos = i + 1;
     }
+
+    printf("Archivo importado\n");
+
     free(file);
 }
 
 void* CreateLibrary(const char* filename)
 {
     List* library = createList();
-
     return library;
 }
 
