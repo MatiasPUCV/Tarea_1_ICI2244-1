@@ -26,17 +26,17 @@ typedef struct Book
 } Book;
 
 Book* CreateBook();
+void FreeBook(Book* book);
+void SetBookState(Book* book, const char* str);
+
 Book* StrToBook(char* str);
 Book* CheckForBook(List* L, char* title, char* author);
 
-void FreeBook(Book* book);
-
 void PrintBook(Book* book);
-void PrintToStreamState(Book* book, FILE* stream);
+void PrintBookToFile(Book* book, FILE* file);
+void PrintBookStateToStream(Book* book, FILE* stream);
 void PrintReservations(Book* book);
-void PrintToFileBook(Book* book, FILE* file);
 
-void SetBookState(Book* book, const char* str);
 
 
 #endif // BOOK_H

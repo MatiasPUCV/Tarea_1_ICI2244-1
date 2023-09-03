@@ -8,6 +8,7 @@
 #include "list.h"
 #include "book.h"
 
+// Uso interno
 char* GetFile(const char* filename);
 
 // Convierte un archivo csv a una lista
@@ -55,7 +56,7 @@ void CsvToList(List* L, const char* filename)
         }
         else
         {
-            // ignora la primera fila del archivo
+            // Ignora la primera fila del archivo
             first = false;
         }
 
@@ -63,27 +64,6 @@ void CsvToList(List* L, const char* filename)
         lastpos = i + 1;
     }
     free(file);
-}
-
-// Exporta una lista como csv
-void ListToCsv(List* L, const char* filename)
-{
-    // Crea el archivo
-    FILE* file = fopen(filename, "w");
-    if (file == NULL)
-    {
-        // ERROR
-    }
-
-    // Pasa los datos de la lista
-    Book* book = firstList(L);
-    while (L->current != NULL)
-    {
-        PrintToFileBook(book, file);
-        book = nextList(L);
-    } 
-
-    fclose(file);
 }
 
 // Lee todo un archivo y lo devuelve en forma de str

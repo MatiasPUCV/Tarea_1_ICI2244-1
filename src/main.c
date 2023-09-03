@@ -8,8 +8,7 @@
 
 int main()
 {
-    List* library = createList();
-    CsvToList(library, "biblioteca.csv");
+    List* library = CreateLibrabry("biblioteca.csv");
 
     ShowBookData(library, "1984", "Orwell");    
 

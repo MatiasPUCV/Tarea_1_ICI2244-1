@@ -1,9 +1,11 @@
 #include "app.h"
-#include "book.h"
 
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+
+#include "book.h"
+#include "csv.h"
 
 #define NO_BOOK(x) if (x == NULL){ printf("[error] No existe libro que cumpla los parametros.\n"); return; }
 
@@ -86,6 +88,35 @@ void ShowTakenBooks(List* L)
             PrintBook(book);
         book = nextList(L);
     }
+}
+
+// Exporta una lista como CSV
+void ExportToCsv(List* L, const char* filename)
+{
+    // Crea el archivo
+    FILE* file = fopen(filename, "w");
+    if (file == NULL)
+    {
+        // ERROR
+    }
+
+    // Pasa los datos de la lista
+    Book* book = firstList(L);
+    while (L->current != NULL)
+    {
+        PrintBookToFile(book, file);
+        book = nextList(L);
+    } 
+
+    fclose(file);
+}
+
+void* CreateLibrabry(const char* filename)
+{
+    List* library = createList();
+    CsvToList(library, filename);
+
+    return library;
 }
 
 // Libera toda la memoria de la lista
