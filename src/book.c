@@ -67,16 +67,17 @@ Book* StrToBook(char* str)
     for(size_t i = 0; i < size; i++)
     {
         char c = str[i];
-        size_t strsize = i - lastpos - 1;
 
         if(c != ',' && c != '\n')
             continue;
 
+        size_t strsize = i - lastpos - 1;
+        
         // Revisa que ningun elemento
         // no tenga más de 50 caracteres
         if(strsize > 50)
         {
-            printf("ERROR: str con más de 50 caracteres; se ignorara el libro\n");
+            printf("[Error] str con más de 50 caracteres; se ignorara el libro\n");
             FreeBook(book);
             return NULL;
         }
