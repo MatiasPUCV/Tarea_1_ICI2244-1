@@ -14,7 +14,7 @@ void ShowAllBooks(List* L);
 void ReserveBook(List* L, char* title, char* author, char* name);
 void CancelReservation(List* L, char* title, char* author, char* name);
 void TakeBook(List* L, char* title, char* author, char* name);
-void TakeBackBook(List* L, char* title, char* author, char* name);
+void TakeBackBook(List* L, char* title, char* author);
 void ShowTakenBooks(List* L);
 void ImportfromCsv(List* L, const char* filename);;
 void ExportToCsv(List* L, const char* filename);

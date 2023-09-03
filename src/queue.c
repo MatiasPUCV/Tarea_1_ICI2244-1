@@ -35,9 +35,8 @@ void pop(Queue* queue)
     queueNode* temp = queue->front;
     queue->front = queue->front->next;
     
-    if (queue->front == NULL) {
+    if (queue->front == NULL)
         queue->back = NULL;
-    }
     
     free(temp);
 }

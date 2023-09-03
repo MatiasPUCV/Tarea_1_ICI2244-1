@@ -12,7 +12,6 @@ int main()
     bool end = false;
 
     while (!end)
-
         App(library, &end);
 
     ClearAll(library);

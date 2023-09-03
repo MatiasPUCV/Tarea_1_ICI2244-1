@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "util.h"
+
 // Uso interno
 void AddElementToBook(Book* book, char* element, int num);
 
@@ -174,12 +176,16 @@ void PrintBookStateToStream(Book* book, FILE* stream)
 void PrintReservations(Book* book)
 {   
     // Recorre la queue de las reservas
-    queueNode* current = book->reservations->front;
-    while (current != NULL)
+    List* list = QueueToList(book->reservations);
+    char* data = firstList(list);
+    while (data != NULL)
     {
-        printf(", %s", current->data);
-        current = current->next;
+        printf(", %s", data);
+        data = nextList(list);
     }
+    
+    book->reservations = ListToQueue(list);
+    free(list);
 }
 
 void AddElementToBook(Book* book, char* element, int num)
@@ -190,14 +196,18 @@ void AddElementToBook(Book* book, char* element, int num)
         *strList[num] = element;
         return;
     }
-
-    if(num >= 3 && num <= 5)
+    else if(num >= 3 && num <= 4)
     {
-        long* intList[3] = {&book->isbn, (long*)&book->ubication, (long*)&book->state};
-        const int baseList[3] = {10, 16, 10};
+        long* intList[2] = {&book->isbn, (long*)&book->ubication};
+        const int baseList[2] = {10, 16};
 
         *intList[num - 3] = strtol(element, NULL, baseList[num - 3]);
         free(element);
+        return;
+    }
+    else if (num == 5)
+    {
+        SetBookState(book, element);
         return;
     }
 

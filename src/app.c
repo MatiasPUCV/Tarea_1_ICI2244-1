@@ -6,6 +6,7 @@
 
 #include "book.h"
 #include "list.h"
+#include "util.h"
 
 #define NO_BOOK(x) if (x == NULL){ printf("[error] No existe libro que cumpla los parametros.\n"); return; }
 
@@ -15,12 +16,13 @@ const int maxTokens = 6;
 // Uso interno
 char* GetFile(const char* filename);
 bool KeyWord(const char* command, const char* option1, int option2);
+bool ErrorParametros(int count, int num);
 
 void App(List* L, bool* end)
 {
     // Guarda memoria para la STR principal
     char* str = calloc(maxTokenSize * maxTokens + 1, sizeof(char));
-    if (scanf(" %[^\n]", str) != 1)
+    if (scanf("%[^\n]", str) != 1)
     {
         free(str);
         *end = false;
@@ -76,64 +78,85 @@ void App(List* L, bool* end)
     {
         if(tokenCount == 2)
             RegisterBook1(L, tokens[1]);
-
-        if(tokenCount == 6)
+        else if(tokenCount == 6)
             RegisterBook2(L, tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]);
+        else
+            printf("[error] Muy pocos argumentos.\n");
     }
-
-    if (KeyWord(tokens[0], "mostrar_datos_libro", 2))
+    else if (KeyWord(tokens[0], "mostrar_datos_libro", 2))
     {
+        if(ErrorParametros(tokenCount, 3))
+            return;
 
         ShowBookData(L, tokens[1], tokens[2]);
     }
-
-    if (KeyWord(tokens[0], "mostar_todos_los_libros", 3))
-         ShowAllBooks(L);
-
-
-    if(KeyWord(tokens[0], "reservar_libro", 4))
+    else if (KeyWord(tokens[0], "mostar_todos_los_libros", 3))
     {
+        if(ErrorParametros(tokenCount, 1))
+            return;
+
+        ShowAllBooks(L);
+    }
+    else if(KeyWord(tokens[0], "reservar_libro", 4))
+    {
+        if(ErrorParametros(tokenCount, 4))
+            return;
 
         ReserveBook(L, tokens[1], tokens[2], tokens[3]);
     }
-
-    if(KeyWord(tokens[0], "cancelar_reserva", 5))
+    else if(KeyWord(tokens[0], "cancelar_reserva", 5))
     {
+        if(ErrorParametros(tokenCount, 4))
+            return;
+
         CancelReservation(L, tokens[1], tokens[2], tokens[3]);
-
     }
-
-    if(KeyWord(tokens[0], "retirar_libro", 6))
+    else if(KeyWord(tokens[0], "retirar_libro", 6))
     {
+        if(ErrorParametros(tokenCount, 4))
+            return;
+
         TakeBook(L, tokens[1], tokens[2], tokens[3]);
-
     }
-
-    if(KeyWord(tokens[0], "devolver_libro", 7))
+    else if(KeyWord(tokens[0], "devolver_libro", 7))
     {
-        TakeBackBook(L, tokens[1], tokens[2], tokens[3]);
+        if(ErrorParametros(tokenCount, 3))
+            return;
 
+        TakeBackBook(L, tokens[1], tokens[2]);
     }
+    else if(KeyWord(tokens[0], "mostrar_prestados", 8))
+    {
+        if(ErrorParametros(tokenCount, 1))
+            return;
 
-    if(KeyWord(tokens[0], "mostrar_prestados", 8))
         ShowTakenBooks(L);
-
-
-
-    if(KeyWord(tokens[0], "importar_csv", 9))
+    }
+    else if(KeyWord(tokens[0], "importar_csv", 9))
     {
+        if(ErrorParametros(tokenCount, 2))
+            return;
+
         ImportfromCsv(L, tokens[1]);
-
     }
-
-    if(KeyWord(tokens[0], "exportar_csv", 10))
+    else if(KeyWord(tokens[0], "exportar_csv", 10))
     {
+        if(ErrorParametros(tokenCount, 2))
+            return;
+
         ExportToCsv(L, tokens[1]);
-
     }
+    else if(KeyWord(tokens[0], "salir", 0))
+    {
+        if(ErrorParametros(tokenCount, 1))
+            return;
 
-    if(KeyWord(tokens[0], "salir", 0))
         *end = true;
+    }
+    else
+    {
+        printf("[error] Comando desconocido: \"%s\".\n", tokens[0]);
+    }
 
     for (int i = 0; i < tokenCount; i++)
         free(tokens[i]);
@@ -146,6 +169,8 @@ void RegisterBook1(List* L, char* str)
 {
     Book* book = StrToBook(str);
     pushBack(L, book);
+
+    printf("Libro %s registrado.", book->author);
 }
 
 void RegisterBook2(List* L, char* title, char* author, char* genre, char* isbn, char* ubication)
@@ -167,6 +192,7 @@ void RegisterBook2(List* L, char* title, char* author, char* genre, char* isbn, 
     book->ubication = strtol(isbn, NULL, 16);
 
     pushBack(L, book);
+    printf("Libro %s registrado.", book->author);
 }
 
 void ShowBookData(List* L, char* title, char* author)
@@ -202,16 +228,27 @@ void CancelReservation(List* L, char* title, char* author, char* name)
     Book* book = CheckForBook(L, title, author);
     NO_BOOK(book);
 
-    queueNode* current = book->reservations->front;
-    while (current != NULL)
+    List* list = QueueToList(book->reservations);
+
+    char* data = firstList(L);
+    while (L->current != NULL)
     {
-        if(strcmp(current->data, name) == 0)
+        if (strcmp(data, name) == 0)
         {
-            // TODO: terminar
+            popCurrent(list);
+
+            book->reservations = ListToQueue(list);
+            free(list);
+            return;
         }
 
-        current = current->next;
+        data = nextList(L);
     }
+
+    printf("[error]: %s no tiene reservado %s.", name, title);
+
+    book->reservations = ListToQueue(list);
+    free(list);
 }
 
 void TakeBook(List* L, char* title, char* author, char* name)
@@ -232,7 +269,7 @@ void TakeBook(List* L, char* title, char* author, char* name)
     }
 }
 
-void TakeBackBook(List* L, char* title, char* author, char* name)
+void TakeBackBook(List* L, char* title, char* author)
 {
     Book* book = CheckForBook(L, title, author);
     NO_BOOK(book);
@@ -251,8 +288,10 @@ void ShowTakenBooks(List* L)
     Book* book = firstList(L);
     while (L->current != NULL)
     {
-        if(book->state == Taken)
+        if (book->state == Taken)
+        {
             PrintBook(book);
+        }
         book = nextList(L);
     }
 }
@@ -386,4 +425,16 @@ bool KeyWord(const char* command, const char* option1, int option2)
 {
     char numStr[3];
     return (strcmp(command, option1) == 0 || strcmp(command, itoa(option2, numStr, 10)) == 0);
+}
+
+bool ErrorParametros(int count, int num)
+{
+    if(count > num)
+        printf("[error] Demasiados argumentos.\n");
+    else if(count < num)
+        printf("[error] Muy pocos argumentos.\n");
+    else
+        return false;
+
+    return true;
 }
