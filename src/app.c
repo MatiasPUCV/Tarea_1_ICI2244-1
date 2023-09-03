@@ -18,6 +18,7 @@ bool KeyWord(const char* command, const char* option1, int option2);
 
 void App(List* L, bool* end)
 {
+    // Guarda memoria para la STR principal
     char* str = calloc(maxTokenSize * maxTokens + 1, sizeof(char));
     if (scanf(" %[^\n]", str) != 1)
     {
@@ -29,6 +30,7 @@ void App(List* L, bool* end)
     size_t size = strlen(str);
     str[size] = ' ';
 
+    // Limpia el buffer de entrada
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 
@@ -36,6 +38,8 @@ void App(List* L, bool* end)
     size_t lastpos = 0;
     int tokenCount = 0;
 
+    // Separa la STR principal en, maximo 6 tokens que
+    // seran lo parametos de cada funcion de la interfaz
     for(int i = 0; i < size + 1; i++)
     {
         char c = str[i];
@@ -56,41 +60,77 @@ void App(List* L, bool* end)
         lastpos = i + 1;
         tokenCount++;
     }
+    
+/*
+    Cada función de la interfaz tiene asociado
+    una palabra y un numero (en pos de la comodidad), si en tokens[0]
+    esta cualqueira de los dos es función sera
+    la que se ejecutara. Las funciones tomaran como
+    parametros el resto de tokens.
+    
+    (Solo RegisterBook2() toma 5, el resto no toman más de 3).
+
+*/
 
     if (KeyWord(tokens[0], "registrar_libro", 1))
     {
         if(tokenCount == 2)
             RegisterBook1(L, tokens[1]);
+
         if(tokenCount == 6)
             RegisterBook2(L, tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]);
     }
 
     if (KeyWord(tokens[0], "mostrar_datos_libro", 2))
+    {
+
         ShowBookData(L, tokens[1], tokens[2]);
+    }
 
     if (KeyWord(tokens[0], "mostar_todos_los_libros", 3))
-        ShowAllBooks(L);
+         ShowAllBooks(L);
+
 
     if(KeyWord(tokens[0], "reservar_libro", 4))
+    {
+
         ReserveBook(L, tokens[1], tokens[2], tokens[3]);
+    }
 
     if(KeyWord(tokens[0], "cancelar_reserva", 5))
+    {
         CancelReservation(L, tokens[1], tokens[2], tokens[3]);
 
+    }
+
     if(KeyWord(tokens[0], "retirar_libro", 6))
+    {
         TakeBook(L, tokens[1], tokens[2], tokens[3]);
 
+    }
+
     if(KeyWord(tokens[0], "devolver_libro", 7))
+    {
         TakeBackBook(L, tokens[1], tokens[2], tokens[3]);
+
+    }
 
     if(KeyWord(tokens[0], "mostrar_prestados", 8))
         ShowTakenBooks(L);
 
+
+
     if(KeyWord(tokens[0], "importar_csv", 9))
+    {
         ImportfromCsv(L, tokens[1]);
 
+    }
+
     if(KeyWord(tokens[0], "exportar_csv", 10))
+    {
         ExportToCsv(L, tokens[1]);
+
+    }
 
     if(KeyWord(tokens[0], "salir", 0))
         *end = true;
