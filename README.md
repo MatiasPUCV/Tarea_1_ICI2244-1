@@ -1,5 +1,6 @@
 # Tarea 1 ICI2244-1
-![foto_0000000120191218112105](https://github.com/MatiasPUCV/Tarea_1_ICI2244-1/assets/142541831/1ee37e92-26ce-4df5-9808-cad4e35088a8)
+![image](https://github.com/MatiasPUCV/Tarea_1_ICI2244-1/assets/142541831/697cadcf-5b6e-4fd4-9301-baa3883555c3)
+
 
 ## Compilación:
 
