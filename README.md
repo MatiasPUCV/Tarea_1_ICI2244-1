@@ -4,9 +4,11 @@
 ## Compilación:
 
 Ejecute en el directorio:
+
 `gcc -Iinclude -o Tarea1 src/main.c src/app.c src/book.c src/util.c src/list.c src/queue.c`
 
 Después ejecute:
+
 `Tarea1.exe`
 
 > Alternativamente puede usar cmake
@@ -17,12 +19,13 @@ La aplicación acepta 11 comandos que siguen la sintaxis: <comando, parámetros�
 Los parámetros están separados por un espacio, si se requiere usar un parámetro de más de una palabra pongalo entre comillas.
 
 Ejemplo de uso:
+
 `mostrar_datos_libro "Fahrenheit 451" Bradbury`
 
 **1. registrar_libro** <título, autor, género,asbm, ubicación>:
 
 Ingresa los datos del libro y la aplicación los almacena. Debe validarse que ningún string tenga un largo mayor a 50 caracteres.
-> Alternativamente puede poner todos los datos juntos separados por una coma.
+> Alternativamente puede poner todos los datos juntos separados por comas.
 
 **2. mostrar_datos_libro** <título, autor>:
 
@@ -61,3 +64,12 @@ Ingresa el nombre del archivo y la aplicación carga todos los libros y sus dato
 La aplicación exporta todos los libros, sus datos y las colas de reservas a un archivo que sigue el formato csv.
 
 > Alternativamente se puede usar un comando poniendo el número que está en la lista.
+
+## Contribuciones
+
+Matías (Puntos 3): Implementación de la interfaz de la aplicación, la lista, operaciones relacionadas con los libros, funciones misceláneas y documentación de la aplicación.
+Angelo (Puntos ¿?): Implementación de cola.
+
+> **Para más información revisar historial de commits**
+
+
