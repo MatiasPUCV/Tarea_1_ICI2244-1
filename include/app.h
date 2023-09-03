@@ -3,9 +3,10 @@
 
 #include "list.h"
 
-void ShowAllBooks(List* L);
 void RegisterBook(List* L, char* str);
+void ShowBookData(List* L, char* title, char* author);
+void ShowAllBooks(List* L);
+
 void ClearAll(List* L);
 
-
-#endif
+#endif // APP_H

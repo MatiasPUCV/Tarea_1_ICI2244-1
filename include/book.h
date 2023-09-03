@@ -1,9 +1,10 @@
-#ifndef BOOK
-#define BOOK
+#ifndef BOOK_H
+#define BOOK_H
 
 #include <stdio.h>
 
 #include "queue.h"
+#include "list.h"
 
 typedef enum State
 {
@@ -17,7 +18,7 @@ typedef struct Book
     char* title;
     char* author;
     char* genre;
-    int isbn;
+    long isbn;
     int ubication;
     State state;
     Queue* reservations;
@@ -26,6 +27,7 @@ typedef struct Book
 
 Book* CreateBook();
 Book* StrToBook(char* str);
+Book* CheckForBook(List* L, char* title, char* author);
 
 void FreeBook(Book* book);
 
@@ -37,4 +39,4 @@ void PrintToFileBook(Book* book, FILE* file);
 void SetBookState(Book* book, const char* str);
 
 
-#endif // BOOK
+#endif // BOOK_H

@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "queue.h"
-
 void AddElementToBook(Book* book, char* element, int num);
 
 // Convierte una STR con la información de un libro
@@ -29,30 +27,30 @@ Book* StrToBook(char* str)
         char c = str[i];
         size_t strsize = i - lastpos - 1;
 
-        if(c == ',' || c == '\n')
+        if(c != ',' && c != '\n')
+            continue;
+
+        // Revisa que ningun elemento
+        // no tenga más de 50 caracteres
+        if(strsize > 50)
         {
-            // Revisa que ningun elemento
-            // no tenga más de 50 caracteres
-            if(strsize > 50)
-            {
-                printf("ERROR: str con más de 50 caracteres; se ignorara el libro\n");
-                FreeBook(book);
-                return NULL;
-            }
-
-            // crea la str que representa el elemento y lo puebla
-            char* element = calloc(51, sizeof(char));
-            for (size_t j = 0; j < strsize + 1; j++)
-            {
-                element[j] = str[j + lastpos];
-            }
-
-            // Añade el elmento al libro
-            AddElementToBook(book, element, elementCount);
-
-            lastpos = i + 1;
-            elementCount++;
+            printf("ERROR: str con más de 50 caracteres; se ignorara el libro\n");
+            FreeBook(book);
+            return NULL;
         }
+
+        // crea la str que representa el elemento y lo puebla
+        char* element = calloc(51, sizeof(char));
+        for (size_t j = 0; j < strsize + 1; j++)
+        {
+            element[j] = str[j + lastpos];
+        }
+
+        // Añade el elmento al libro
+        AddElementToBook(book, element, elementCount);
+
+        lastpos = i + 1;
+        elementCount++;
     }
 
     if (elementCount <= 5)
@@ -67,34 +65,24 @@ Book* StrToBook(char* str)
 
 void AddElementToBook(Book* book, char* element, int num)
 {
-    switch (num)
+    if (num < 3)
     {
-    case 0:
-        book->title = element;
-        break;
-    case 1:
-        book->author = element;
-        break;
-    case 2:
-        book->genre = element;
-        break;
-    case 3:
-        book->isbn = strtol(element, NULL, 10);
-        free(element);
-        break;
-    case 4:
-        book->ubication = strtol(element, NULL, 16);
-        free(element);
-        break;
-    case 5:
-        SetBookState(book, element);
-        free(element);
-        break;
-    
-    default:
-        push(book->reservations, element);
-        break;
+        char** strList[3] = {&book->title, &book->author, &book->genre};
+        *strList[num] = element;
+        return;
     }
+
+    if(num >= 3 && num <= 5)
+    {
+        long* intList[3] = {&book->isbn, (long*)&book->ubication, (long*)&book->state};
+        const int baseList[3] = {10, 16, 10};
+
+        *intList[num - 3] = strtol(element, NULL, baseList[num - 3]);
+        free(element);
+        return;
+    }
+
+    push(book->reservations, element);
 }
 
 // Pone el estado de un libro
@@ -102,19 +90,19 @@ void SetBookState(Book* book, const char* str)
 {
     if (strcmp(str, "Disponible") == 0)
         book->state = Available;
-    else if (strcmp(str, "Reservado") == 0)
+    if (strcmp(str, "Reservado") == 0)
         book->state = Reserved;
-    else if (strcmp(str, "Prestado") == 0)
+    if (strcmp(str, "Prestado") == 0)
         book->state = Taken;
 }
 
-// Libera la memoria de las STR que contiene 'Book'
+// Libera la memoria de las STR que contiene el libro
 void FreeBook(Book* book)
 {
     char** strList[3] = {&book->title, &book->author, &book->genre};
     for (int i = 0; i < 3; i++)
     {
-        if(*strList[i] == NULL)
+        if(*strList[i] != NULL)
             free(*strList[i]);
     }
 
@@ -163,11 +151,11 @@ void PrintBook(Book* book)
 {
     printf("%s,  %s,  %s,  %i,  %x, ", book->title, book->author, book->genre, book->isbn, book->ubication);
     PrintToStreamState(book, stdout);
-    printf(", ");
     PrintReservations(book);
     printf("\n");
 }
 
+// Imprie en un archivo o en consola el estado de un libro
 void PrintToStreamState(Book* book, FILE* stream)
 {
     switch (book->state)
@@ -184,6 +172,22 @@ void PrintToStreamState(Book* book, FILE* stream)
     }
 }
 
+// Revisa si existe un libro en un lista si y lo devuelve, si no retorna NULL
+Book* CheckForBook(List* L, char* title, char* author)
+{
+    Book* book = firstList(L);
+    
+    while (L->current != NULL)
+    {
+        if (strcmp(book->title, title) == 0 && strcmp(book->author, author) == 0)
+            return book;
+
+        book = nextList(L);
+    }
+
+    return NULL;
+}
+
 // Imprime las reservas de un libro
 void PrintReservations(Book* book)
 {   
@@ -191,9 +195,7 @@ void PrintReservations(Book* book)
     queueNode* current = book->reservations->front;
     while (current != NULL)
     {
-        printf("%s", current->data);
+        printf(", %s", current->data);
         current = current->next;
-        if (current != NULL)
-            printf(", ");
     }
 }

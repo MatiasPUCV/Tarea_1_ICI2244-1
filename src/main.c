@@ -11,12 +11,9 @@ int main()
     List* library = createList();
     CsvToList(library, "biblioteca.csv");
 
-    char test[] = "Título,Autor,Género,ISBN,Ubicación,Estado,Reservas";
-    RegisterBook(library, test);
+    ShowBookData(library, "1984", "Orwell");    
 
-    ListToCsv(library, "Test.csv");
 
-    ShowAllBooks(library);
     ClearAll(library);
 }
 

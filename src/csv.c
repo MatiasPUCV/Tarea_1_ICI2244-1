@@ -62,6 +62,7 @@ void CsvToList(List* L, const char* filename)
         free(str);
         lastpos = i + 1;
     }
+    free(file);
 }
 
 // Exporta una lista como csv
