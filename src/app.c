@@ -193,9 +193,14 @@ void App(List* L, bool* end)
 void RegisterBook1(List* L, char* str)
 {
     Book* book = StrToBook(str);
-    pushBack(L, book);
+    if (book != NULL){
+        pushBack(L, book);
+        printf("Libro %s registrado.", book->author);
+    }
+    else{
+        printf("[Error] No se puede registrar el libro.\n");
+    }
 
-    printf("Libro %s registrado.", book->author);
 }
 
 void RegisterBook2(List* L, char* title, char* author, char* genre, char* isbn, char* ubication)
