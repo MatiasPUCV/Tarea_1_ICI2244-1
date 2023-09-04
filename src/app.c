@@ -193,6 +193,7 @@ void App(List* L, bool* end)
 void RegisterBook1(List* L, char* str)
 {
     Book* book = StrToBook(str);
+    
     if (book != NULL){
         pushBack(L, book);
         printf("Libro %s registrado.", book->author);
