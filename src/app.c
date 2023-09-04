@@ -211,10 +211,12 @@ void RegisterBook2(List* L, char* title, char* author, char* genre, char* isbn, 
     {
         if(strlen(*strList[i]) > 50)
             printf("[Error] STR con más de 50 caracteres; se ignorara el libro\n");
+            return;
 
     }
-
+    
     /*
+    Metodo alternativo para verificar que cada dato tenga menos de 50 caracteres
     if (strlen(&title) > 50 || strlen(&author) > 50 || strlen(&genre) > 50 || strlen(&isbn) > 50 || strlen(&ubication) > 50)
     {
         printf("[Error] STR con más de 50 caracteres; se ignorara el libro\n");
