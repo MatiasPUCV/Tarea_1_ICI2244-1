@@ -70,7 +70,7 @@ La aplicación exporta todos los libros, sus datos y las colas de reservas a un 
 
 Matías (Puntos 3): Implementación de la interfaz de la aplicación, la lista, operaciones relacionadas con los libros, funciones misceláneas y documentación de la aplicación.
 
-Angelo (Puntos ¿?): Implementación de cola.
+Angelo (Puntos 1): Implementación de cola, depuración de código.
 
 > **Para más información revisar historial de commits**
 
